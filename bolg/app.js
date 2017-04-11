@@ -10,6 +10,23 @@ var users = require('./routes/users');
 
 var app = express();
 
+//mongodb新增的
+var session = require('express-session');
+var MongoStore= require('connect-mongo')(session);
+
+app.use(session({
+    secret: settings.cookieSecret,
+    key:settings.db,
+    cookie:{maxAge:1000*60*60*24*30},
+    store: new MongoStore({
+        db:settings.db,
+        host:settings.host,
+        port:settings.port
+    })
+}));
+
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -19,16 +36,16 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use("/public",express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
-
+/*
 app.use('/public/bootstrap/js', express.static(__dirname + '/public/bootstrap/js'));
 app.use('/public/bootstrap/css/', express.static(__dirname + '/public/bootstrap/css/'));
 app.use('/public/javascripts/', express.static(__dirname + '/public/javascripts/'));
 app.use('/public/stylesheets/', express.static(__dirname + '/public/stylesheets/'));
-
+*/
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

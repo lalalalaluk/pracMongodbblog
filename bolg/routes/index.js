@@ -7,7 +7,7 @@ router.get('/', function(req, res) {
 });
 
 router.get('/reg', function(req, res) {
-  res.render('main', { title: '註冊' });
+  res.render('register', { title: '註冊' });
 });
 
 router.post('/reg', function(req, res) {
